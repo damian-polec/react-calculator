@@ -1,14 +1,83 @@
 body {
   margin: 0;
   padding: 0;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
-    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
-    monospace;
+.App {
+  margin: 0 auto;
 }
+
+.calculator {
+  display: grid;
+  height: 700px;
+  width:50%;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr;
+  grid-gap: 0px 0px;
+  grid-template-areas: "display display display display" "clear clear divide multiply" "seven eight nine subtract" "four five six add" "one two three equals" "zero zero decimal equals";
+  border: 2px solid #000;
+}
+
+.button {
+  background: #000;
+  color: #fff;
+  font-size: 20px;
+  border: solid 1px #fff;
+}
+.display { 
+  grid-area: display;
+  text-align: end;
+  font-size: 40px;
+}
+
+.clear { 
+  grid-area: clear;
+ }
+
+.divide { 
+  grid-area: 2 / 3 / 3 / 4;
+ }
+
+.multiply { 
+  grid-area: 2 / 4 / 3 / 5; 
+}
+
+.subtract { 
+  grid-area: 3 / 4 / 4 / 5;
+ }
+
+.add { 
+  grid-area: 4 / 4 / 5 / 5;
+ }
+
+.equals { 
+  grid-area: 5 / 4 / 7 / 5;
+ }
+
+.decimal { 
+  grid-area: decimal;
+ }
+
+.zero { 
+  grid-area: 6 / 1 / 7 / 3;
+ }
+
+.one { grid-area: 5 / 1 / 6 / 2; }
+
+.two { grid-area: 5 / 2 / 6 / 3; }
+
+.three { grid-area: 5 / 3 / 6 / 4; }
+
+.four { grid-area: 4 / 1 / 5 / 2; }
+
+.five { grid-area: 4 / 2 / 5 / 3; }
+
+.six { grid-area: 4 / 3 / 5 / 4; }
+
+.seven { grid-area: 3 / 1 / 4 / 2; }
+
+.eight { grid-area: 3 / 2 / 4 / 3; }
+
+.nine { grid-area: 3 / 3 / 4 / 4; }
+
+
