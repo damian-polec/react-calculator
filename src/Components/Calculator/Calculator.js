@@ -7,94 +7,176 @@ class Calculator extends Component {
   constructor(props){
     super(props)
     this.state = {
-      value: '0',
-      buttons: [
-        {
-          id: 'clear',
-          text: 'AC'
-        },
-        {
-          id: 'divide',
-          text: '/'
-        },
-        {
-          id: 'multiply',
-          text: 'X'
-        },
-        {
-          id: 'subtract',
-          text: '-'
-        },
-        {
-          id: 'add',
-          text: '+'
-        },
-        {
-          id: 'equals',
-          text: '='
-        },
+      result: '0',
+      equation: '',
+      numbers: [
         {
           id: 'decimal',
-          text: '.'
+          text: '.',
+          dataType: '.'
         },
         {
           id: 'zero',
-          text: '0'
+          text: '0',
+          dataType: 0
         },
         {
           id: 'one',
-          text: '1'
+          text: '1',
+          dataType: 1
         },
         {
           id: 'two',
-          text: '2'
+          text: '2',
+          dataType: 2
         },
         {
           id: 'three',
-          text: '3'
+          text: '3',
+          dataType: 3
         },
         {
           id: 'four',
-          text: '4'
+          text: '4',
+          dataType: 4
         },
         {
           id: 'five',
-          text: '5'
+          text: '5',
+          dataType: 5
         },
         {
           id: 'six',
-          text: '6'
+          text: '6',
+          dataType: 6
         },
         {
           id: 'seven',
-          text: '7'
+          text: '7',
+          dataType: 7
         },
         {
           id: 'eight',
-          text: '8'
+          text: '8',
+          dataType: 8
         },
         {
           id: 'nine',
-          text: '9'
+          text: '9',
+          dataType: 9
+        }
+      ],
+      symbols: [
+        {
+          id: 'divide',
+          text: '/',
+          dataType: '/'
+        },
+        {
+          id: 'multiply',
+          text: 'X',
+          dataType: '*'
+        },
+        {
+          id: 'subtract',
+          text: '-',
+          dataType: '-'
+        },
+        {
+          id: 'add',
+          text: '+',
+          dataType: '+'
         }
       ]
     }
 
     this.onClearHandler = this.onClearHandler.bind(this);
+    this.onNumberHandler = this.onNumberHandler.bind(this);
+    this.onSymbolHandler = this.onSymbolHandler.bind(this);
+    this.onEqualsHandler = this.onEqualsHandler.bind(this);
   }
 
   onClearHandler () {
-    this.setState({value: '0'});
+    this.setState({result: '0', equation: ''});
+  }
+
+  onEqualsHandler () {
+    const equation = this.state.equation;
+    const result = this.state.result;
+    const finalResult = eval(equation + result)
+    this.setState({result: finalResult, equation: ''});
+  }
+  
+  onNumberHandler (e) {
+    let value = this.state.result;
+    const clickedButton = e.target.getAttribute('data-type');
+
+    const count = value.split('').filter(sign => sign === '.').length;
+    if(value === '0') {
+      if(clickedButton === '.') {
+        value = value + clickedButton;
+        this.setState({result: value});
+      } else {
+        this.setState({result: clickedButton});
+      }
+    } else if (value !== '0') {
+      if(clickedButton === '.' && count > 0) {
+        return;
+      } else {
+        value += clickedButton;
+        this.setState({result: value});
+      }
+    }  
+  }
+  onSymbolHandler (e) {
+    let value = this.state.result;
+    let equation = this.state.equation;
+    const clickedSymbol = e.target.getAttribute('data-type');
+    
+
+    if(value === '0') {
+      if((/\.$/g.test(value))){
+        return;
+      } else {
+        const lastChar = equation.slice(-1);
+        const newEquation = equation.replace(lastChar, clickedSymbol);
+        this.setState({equation: newEquation});
+      }
+    } else {
+      if(equation === '0') {
+        equation = value + clickedSymbol;
+        this.setState({result: '0', equation: equation})
+      }
+      value += clickedSymbol;
+      equation += value;
+      this.setState({result: '0', equation: equation});
+    }
   }
 
   render () {
-    const buttons = this.state.buttons.map(button => {
-      return <Button buttonType={button.id} key={button.id}>{button.text}</Button>
+    const symbols = this.state.symbols.map(button => {
+      return (
+        <Button 
+          buttonType={button.id}
+          dataType={button.dataType} 
+          key={button.id}
+          click={e => this.onSymbolHandler(e)}>{button.text}</Button>)
+    })
+    const numbers = this.state.numbers.map(button => {
+      return (
+        <Button 
+          buttonType={button.id}
+          dataType={button.dataType} 
+          key={button.id}
+          click={e => this.onNumberHandler(e)}>{button.text}</Button>)
     })
     return (
       <div className = 'calculator'>
-        <Display value={this.state.value}/>
-        {buttons}
+        <Display result={this.state.result} equation={this.state.equation}/>
+        <Button buttonType='clear' click={this.onClearHandler}>AC</Button>
+        <Button buttonType='equals' click={this.onEqualsHandler}>=</Button>
+        {numbers}
+        {symbols}
       </div>
     )
   }
